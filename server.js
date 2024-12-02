@@ -38,7 +38,7 @@ app.get('/books', (req, res) => {
 // New
 app.get('/books/new', (req, res) => {
     // create a new item
-    res.json({ message: 'You are on a new page with an empty form to submit your new book.' });
+    res.render('books/new', { title: 'New Book' })
 });
 
 // POST
