@@ -15,7 +15,7 @@
     </nav>
     <!-- TODO:  main content -->
      <div class="container">
-        <form action="" class="col s12">
+        <form action="/books/<%= book.id %>?_method=PUT" method="POST" class="col s12">
             <!-- Title field -->
              <div class="row">
                 <div class="input-field col s12">
@@ -31,7 +31,9 @@
                 </div>
              </div>
               <!-- Submit button -->
-               
+               <div class="row center-align">
+            <button type="submit" class="btn wave-effect wave-light teal">Update</button>
+               </div>
         </form>
      </div>
 </body>
