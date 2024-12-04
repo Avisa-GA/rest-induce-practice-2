@@ -22,7 +22,9 @@
             </div>
             <div class="card-action">
                 <a href="/books/<%= book.id %>/edit" class="btn waves-effect waves-light teal">Edit</a>
+                <form action="/books/<%= book.id %>?_method=DELETE" method="POST">
                 <button class="btn red waves-effect waves-light">Delete</button>
+                </form>
             </div>
         </div>
      </div>
