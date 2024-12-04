@@ -73,16 +73,18 @@ app.get('/books/:id/edit', (req, res) => {
     }
 })
 // EDIT
+// / Update - Update a book
 app.put('/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id);
-    const bookIndex = books.findIndex(book => book.id === bookId)
+    const bookIndex = books.findIndex(book => book.id === bookId);
     if (bookIndex !== -1) {
-        books[bookIndex] = { ...books[bookIndex], ...req.body }
-        res.status(200).redirect(`/books`)
+        books[bookIndex] = { ...books[bookIndex], ...req.body };
+        res.status(200).redirect(`/books`);
+        // res.render('bookUpdated', { title: 'Book Updated', book: books[bookIndex] });
     } else {
-        res.status(404).render('404/notFound', { title: 'Book Not Found' })
+        res.status(404).render('404/notFound', { title: 'Book Not Found' });
     }
-})
+});
 
 // DELETE
 app.delete('/books/:id', (req, res) => {
