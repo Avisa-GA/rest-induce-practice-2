@@ -64,6 +64,14 @@ app.get('/books/:id', (req, res) => {
     }
 })
 
+app.get('/books/:id/edit', (req, res) => {
+    const book = books.find(book => book.id === parseInt(req.params.id));
+    if (book) {
+        res.render('books/edit', { title: 'Edit Book', book });
+    } else {
+        res.status(404).render('404/notFound', { title: 'Book Not Found!' })
+    }
+})
 // EDIT
 app.put('/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id);
