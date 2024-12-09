@@ -14,19 +14,27 @@ async function index(req, res) {
 
 }
 
-
+// open a form
 function newBook(req, res) {
     res.render('books/new', { title: 'New Book' })
 }
 
-function postBook(req, res) {
-    const newBook = {
-        id: books.length + 1,
-        title: req.body.title || "new book",
-        author: req.body.author || "new author"
+async function postBook(req, res) {
+    try {
+        const { title = "new book", author = "new author" } = req.body;
+
+        const newBook = new Book({
+            title: title,
+            author: author
+        })
+
+        await newBook.save();
+        res.status(201).redirect('/books')
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal server error')
     }
-    books.push(newBook);
-    res.status(201).redirect('/books')
+
 }
 
 function showBook(req, res) {
