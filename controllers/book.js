@@ -1,8 +1,17 @@
-const books = require('../data/books')
 
+const Book = require('../models/book')
 
-function index(req, res) {
-    res.render('books', { title: "Book List", books })
+// fetch all data
+async function index(req, res) {
+
+    try {
+        const books = await Book.find({})
+        res.render('books', { title: 'Book List', books })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send('Internal server error');
+    }
+
 }
 
 
