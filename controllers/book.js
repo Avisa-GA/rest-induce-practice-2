@@ -37,13 +37,19 @@ async function postBook(req, res) {
 
 }
 
-function showBook(req, res) {
-    const book = books.find(book => book.id === parseInt(req.params.id));
-    if (book) {
-        res.render('books/show', { title: 'Book Details', book })
-    } else {
-        res.status(404).render('404/notFound', { title: "Book not found" })
+async function showBook(req, res) {
+    try {
+        const book = await Book.findById(req.params.id);
+        if (book) {
+            res.render('books/show', { title: 'Book Details', book })
+        } else {
+            res.status(404).render('404/notFound', { title: "Book not found" })
+        }
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Server internal error')
     }
+
 }
 
 
