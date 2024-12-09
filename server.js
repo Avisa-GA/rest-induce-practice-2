@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 // CONFIGURE MONGOOSE
 // ==================
 // getting-started.js
-require('./config/database');
+require('./configs/database');
 
 
 
@@ -33,11 +33,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 //      ROUTES (I.N.D.U.C.E)
 // ***************************
 
+// Seed Route
+app.use('/', require('./routes/seed'));
 
-// Index
-app.get('/', (req, res) => {
-    res.render('home')
-});
+// Home Route
+app.use('/', require('./routes/home'));
+
 
 // Index
 app.get('/books', (req, res) => {
@@ -50,15 +51,7 @@ app.get('/books/new', (req, res) => {
     res.render('books/new', { title: 'New Book' })
 });
 
-app.post('/seed', async (req, res) => {
-    try {
-        await Book.insertMany(books);
-        res.status(201).send('Books seeded successfully')
-    } catch (error) {
-        console.error(error.message)
-        res.status(404).send('Error seeding books')
-    }
-})
+
 // POST
 app.post('/books', (req, res) => {
     const newBook = {
@@ -70,7 +63,7 @@ app.post('/books', (req, res) => {
     res.status(201).redirect('/books')
 })
 
-
+// 
 // SHOW
 app.get('/books/:id', (req, res) => {
     const book = books.find(book => book.id === parseInt(req.params.id));
