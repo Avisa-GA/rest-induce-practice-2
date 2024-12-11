@@ -87,15 +87,20 @@ async function updateBook(req, res) {
 
 }
 
-function deleteBook(req, res) {
-    const bookId = parseInt(req.params.id);
-    const bookIndex = books.findIndex(book => book.id === bookId);
-    if (bookIndex !== -1) {
-        books.splice(bookIndex, 1);
-    } else {
-        res.status(404).render('404/notFound', { title: 'Book Not Found' });
+async function deleteBook(req, res) {
+    try {
+        const { id } = req.params;
+        const deletedBook = await Book.findByIdAndDelete(id)
+        if (deletedBook) {
+            res.status(200).redirect('/books')
+        } else {
+            res.status(404).render('404/notFound', { title: 'Book Not Found' });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error")
     }
-    res.redirect('/books');
+
 }
 
 module.exports = { index, newBook, postBook, editBook, updateBook, showBook, deleteBook }
