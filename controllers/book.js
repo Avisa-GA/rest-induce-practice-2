@@ -53,25 +53,38 @@ async function showBook(req, res) {
 }
 
 
-function editBook(req, res) {
-    const book = books.find(book => book.id === parseInt(req.params.id));
-    if (book) {
-        res.render('books/edit', { title: 'Edit Book', book });
-    } else {
-        res.status(404).render('404/notFound', { title: 'Book Not Found!' })
+async function editBook(req, res) {
+    try {
+        const book = await Book.findById(req.params.id);
+        if (book) {
+            res.render('books/edit', { title: 'Edit Book', book });
+        } else {
+            res.status(404).render('404/notFound', { title: 'Book Not Found!' })
+        }
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Internal Server Error')
     }
+
 }
 
-function updateBook(req, res) {
-    const bookId = parseInt(req.params.id);
-    const bookIndex = books.findIndex(book => book.id === bookId);
-    if (bookIndex !== -1) {
-        books[bookIndex] = { ...books[bookIndex], ...req.body };
-        res.status(200).redirect(`/books`);
-        // res.render('bookUpdated', { title: 'Book Updated', book: books[bookIndex] });
-    } else {
-        res.status(404).render('404/notFound', { title: 'Book Not Found' });
+async function updateBook(req, res) {
+    try {
+        const bookId = parseInt(req.params.id);
+        const { id } = req.params;
+
+        const updatedBook = await Book.findByIdAndUpdate(id, req.body)
+        if (updatedBook) {
+            res.status(200).redirect(`/books`);
+            // res.render('bookUpdated', { title: 'Book Updated', book: books[bookIndex] });
+        } else {
+            res.status(404).render('404/notFound', { title: 'Book Not Found' });
+        }
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send('Internal Server Error')
     }
+
 }
 
 function deleteBook(req, res) {
