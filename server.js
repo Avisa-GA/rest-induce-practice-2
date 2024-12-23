@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const methodOverride = require('method-override')
 const app = express();
 const path = require('path');
+const session = require('express-session')
+const MongoConnect = require('connect-mongo')
 
 
 // ==================
@@ -17,9 +19,18 @@ require('./configs/database');
 // ********************
 
 app.use(morgan('dev'));
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(methodOverride('_method'))
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoConnect.create({
+        mongoUrl: process.env.MONGO_URI
+    }),
+    cookie: { secure: process.env.NODE_ENV === 'Production', httpOnly: true }
+}))
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
@@ -32,6 +43,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Seed Route
 app.use('/', require('./routes/seed'));
+
+// Auth Route
+app.use("/", require('./routes/auth'));
 
 // Home Route
 app.use('/', require('./routes/home'));
