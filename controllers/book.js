@@ -5,6 +5,9 @@ const Book = require('../models/book')
 async function index(req, res) {
 
     try {
+        if (!req.session.user) {
+            return res.redirect('auth/sign-in')
+        }
         const books = await Book.find({})
         res.render('books', { title: 'Book List', books })
     } catch (error) {
@@ -19,22 +22,24 @@ function newBook(req, res) {
     res.render('books/new', { title: 'New Book' })
 }
 
+// Create - Add a new book
 async function postBook(req, res) {
     try {
-        const { title = "new book", author = "new author" } = req.body;
+        if (!req.session.user) {
+            return res.redirect('/auth/sign-in');
+        }
+        console.log(req.session.user); // Ensure this contains the user with _id
 
-        const newBook = new Book({
-            title: title,
-            author: author
-        })
-
-        await newBook.save();
-        res.status(201).redirect('/books')
+        const newBook = {
+            ...req.body,
+            createdBy: req.session.user.id
+        };
+        await Book.create(newBook);
+        res.status(200).redirect('/books');
     } catch (error) {
-        console.error(error.message);
-        res.status(500).send('Internal server error')
+        console.error('Error adding new book:', error);
+        res.status(500).send('Internal Server Error');
     }
-
 }
 
 async function showBook(req, res) {
