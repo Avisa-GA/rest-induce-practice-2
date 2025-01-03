@@ -1,5 +1,6 @@
 
 const Book = require('../models/book')
+const moment = require('moment')
 
 // fetch all data
 async function index(req, res) {
@@ -9,7 +10,11 @@ async function index(req, res) {
             return res.redirect('auth/sign-in')
         }
         const books = await Book.find({}).populate('createdBy');
-        res.render('books', { title: 'Book List', books })
+        const formattedBook = books.map(book => ({
+            ...book.toObject(),
+            formattedDate: moment(book.createdAt).fromNow()
+        }))
+        res.render('books', { title: 'Book List', books: formattedBook })
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');

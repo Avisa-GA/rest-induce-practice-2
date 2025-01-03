@@ -27,6 +27,9 @@
                             <%= books[index].createdBy ? books[index].createdBy.username : 'Unknown' %>
                         </strong>
                     </span>
+                    <span style="font-size: smaller;color: lightseagreen;">
+                        <%= books[index].formattedDate ? books[index].formattedDate : 'Date not available' %>
+                    </span>
             </div>
             </li>
             <% } %>
