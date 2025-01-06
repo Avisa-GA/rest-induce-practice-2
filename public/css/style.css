@@ -56,3 +56,27 @@ body {
     color: red;
     text-align: center;
 }
+
+        .book-container {
+            margin-left: 50px;
+        }
+
+        .created-by {
+            font-size: smaller;
+            color: lightseagreen;
+        }
+
+        .comment {
+            color: darkgray;
+            margin-left: 5%;
+            font-size: small;
+        }
+
+        .comment-input {
+            width: 100px;
+            border-style: none;
+            color: lightblue;
+            background-color: white;
+            margin-right: 1%;
+            margin-bottom: 2%;
+        }
