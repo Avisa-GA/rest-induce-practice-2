@@ -14,7 +14,7 @@ async function index(req, res) {
             ...book.toObject(),
             formattedDate: moment(book.createdAt).fromNow()
         }))
-        res.render('books', { title: 'Book List', books: formattedBook })
+        res.render('books', { title: 'Book List 2', books: formattedBook })
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Internal server error');
@@ -45,6 +45,26 @@ async function postBook(req, res) {
         console.error('Error adding new book:', error);
         res.status(500).send('Internal Server Error');
     }
+}
+
+
+async function addComment(req, res) {
+
+    try {
+        const book = await Book.findById(req.params.id);
+        const newComment = {
+            ...req.body,
+            createdBy: req.session.user.id
+        }
+
+        book.comments.push(newComment)
+        await book.save()
+        res.status(200).redirect('/books')
+    } catch (error) {
+        console.error('Error adding new comment:', error)
+        res.status(500).send('Internal Server Error')
+    }
+
 }
 
 async function showBook(req, res) {
@@ -113,4 +133,4 @@ async function deleteBook(req, res) {
 
 }
 
-module.exports = { index, newBook, postBook, editBook, updateBook, showBook, deleteBook }
+module.exports = { index, newBook, postBook, editBook, updateBook, showBook, deleteBook, addComment }
