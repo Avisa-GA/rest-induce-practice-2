@@ -9,7 +9,7 @@ async function index(req, res) {
         if (!req.session.user) {
             return res.redirect('auth/sign-in')
         }
-        const books = await Book.find({}).populate('createdBy');
+        const books = await Book.find({}).populate('createdBy', 'username').populate('comments.createdBy', 'username');
         const formattedBook = books.map(book => ({
             ...book.toObject(),
             formattedDate: moment(book.createdAt).fromNow()
