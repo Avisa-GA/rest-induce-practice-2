@@ -4,6 +4,7 @@ const bookCtrl = require('../controllers/book');
 router.get('/books', bookCtrl.index);
 router.get('/books/new', bookCtrl.newBook);
 router.post('/books', bookCtrl.postBook);
+router.post('/books/:id/comments');
 router.get('/books/:id', bookCtrl.showBook);
 router.get('/books/:id/edit', bookCtrl.editBook);
 router.put('/books/:id', bookCtrl.updateBook);
